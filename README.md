@@ -2,8 +2,8 @@
 
 This is the report for
 
- + Firstname Lastname, `stil_id`
- + ...
+ + Isak Marklund, `is4484ma-s`
+ + Edward Sjöblom, `ed2576sj-s`
 
 We solved this project on our own, except for:
 
@@ -13,16 +13,11 @@ We solved this project on our own, except for:
 
 ## ER-design
 
-The model is in the file [`er-model.png`](er-model.png):
+The model is in the file [`model.png`](model.png):
 
 <center>
-    <img src="er-model.png" width="100%">
+    <img src="model.png" width="100%">
 </center>
-
-(The image above describes the model from lecture 4, you
-must replace the file '`er-model.png`' with an image of your
-own ER-model).
-
 
 ## Relations
 
