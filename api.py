@@ -149,4 +149,34 @@ def get_ingredients():
     for (ingredient_name, current_quantity, unit) in c]
     return format_response(data)
 
+#curl -X GET http://localhost:8888/cookies
+@get('/cookies')
+def get_cookies():
+    c = conn.cursor()
+    c.execute(
+    """
+    SELECT cookie_name
+    FROM cookies
+    ORDER BY cookie_name ASC
+    """
+    )
+    data = [{'name': cookie_name} for (cookie_name) in c]
+    return format_response(data)
+
+#curl -X GET http://localhost:8888/recipes
+@get('/recipes')
+def get_recipes():
+    c = conn.cursor()
+    c.execute(
+    """
+    SELECT *
+    FROM recipe_items
+    WHERE 1=1
+    ORDER BY cookie_name, ingredient_name ASC
+    """
+    )
+    data = [{'name': cookie_name, 'ingredient': ingredient_name, 'quantity': quantity}
+    for (cookie_name, ingredient_name, quantity) in c]
+    return format_response(data)
+
 run(host='localhost', port=8888)
