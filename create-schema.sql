@@ -24,8 +24,8 @@ CREATE TABLE pallets(
     blocked BOOLEAN DEFAULT FALSE,
 
     PRIMARY KEY (pallet_id)
-    FOREIGN KEY (order_id) REFERENCES orders (order_id)
-    FOREIGN KEY (delivery_id) REFERENCES orders (deliveries)
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    FOREIGN KEY (delivery_id) REFERENCES orders(deliveries)
     FOREIGN KEY (cookie_name) REFERENCES orders(cookies)
 );
 
@@ -41,7 +41,7 @@ CREATE TABLE order_specs(
     cookie_name TEXT,
     quantity INT,
 
-    FOREIGN KEY (order_id) REFERENCES orders (order_id)
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
     FOREIGN KEY (cookie_name) REFERENCES orders(cookies)
 );
 
@@ -51,7 +51,7 @@ CREATE TABLE recipe_items(
     quantity INT,
 
     FOREIGN KEY (cookie_name) REFERENCES orders(cookies)
-    FOREIGN KEY (ingredient_name) REFERENCES orders (ingredients)
+    FOREIGN KEY (ingredient_name) REFERENCES orders(ingredients)
 );
 
 CREATE TABLE customers(
