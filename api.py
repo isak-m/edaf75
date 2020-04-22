@@ -160,7 +160,7 @@ def get_cookies():
     ORDER BY cookie_name ASC
     """
     )
-    data = [{'name': cookie_name} for (cookie_name) in c]
+    data = [{'name': cookie_name[0]} for (cookie_name) in c]
     return format_response(data)
 
 #curl -X GET http://localhost:8888/recipes
