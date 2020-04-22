@@ -134,4 +134,19 @@ def get_customers():
             for (customer_name, address) in c]
     return format_response(data)        
 
+#curl -X GET http://localhost:8888/ingredients
+@get('/ingredients')
+def get_ingredients():
+    c = conn.cursor()
+    c.execute(
+    """
+    SELECT ingredient_name, current_quantity, unit
+    FROM ingredients
+    WHERE 1=1
+    """
+    )
+    data = [{'name': ingredient_name, 'quantity': current_quantity, 'unit': unit}
+    for (ingredient_name, current_quantity, unit) in c]
+    return format_response(data)
+
 run(host='localhost', port=8888)
