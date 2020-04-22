@@ -41,7 +41,7 @@ VALUES ("Flour", 100000, "g"),
        ("Vanilla sugar", 100000, "g");
 
 INSERT
-INTO recipes(cookie_name, ingredient_name, quantity)
+INTO recipe_items(cookie_name, ingredient_name, quantity)
 VALUES ("Nut ring", "Flour", 450),
        ("Nut ring", "Butter", 450),
        ("Nut ring", "Icing sugar", 190),
