@@ -17,8 +17,8 @@ CREATE TABLE orders(
 
 CREATE TABLE pallets(
     pallet_id TEXT DEFAULT (lower(hex(randomblob(16)))),
-    order_id TEXT DEFAULT (lower(hex(randomblob(16)))),
-    delivery_id TEXT DEFAULT (lower(hex(randomblob(16)))),
+    order_id TEXT NOT NULL,
+    delivery_id TEXT NOT NULL,
     cookie_name TEXT,
     production_date DATE,
     blocked BOOLEAN,
@@ -37,7 +37,7 @@ CREATE TABLE deliveries(
 );
 
 CREATE TABLE order_specs(
-    order_id TEXT DEFAULT (lower(hex(randomblob(16)))),
+    order_id TEXT NOT NULL,
     cookie_name TEXT,
     quantity INT,
 
