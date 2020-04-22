@@ -35,6 +35,15 @@ are both primary keys and foreign keys):
 + authored_books(**_author_name_**, **_isbn_**)
 + copies(**copy_barcode**, _isbn_, _library_name_, shelf)
 + ...
++ orders(**order_id**, arrival_date)
++ pallets(**pallet_id**, production_date, blocked)
++ deliveries(**delivery_id**, delivery_date)
++ orderspecs(quantity)
++ recipeitems(quantity)
++ customers(**customer_name**, address)
++ cookies(**cookie_name**)
++ ingredients(**ingredient_name**, current_quantity, unit, delivery_quantity)
+
 
 (this should be replaced with your own relations, of course,
 but use the same way of marking primary keys and foreign
