@@ -183,17 +183,17 @@ def get_recipes():
 @post('/pallets')
 def add_pallet():
     cookie = request.query.cookie
-    date = '2020-04-22'
     c = conn.cursor()
     c.execute(
     """
-        INSERT OR IGNORE
+        INSERT
         INTO pallets(cookie_name, production_date)
         VALUES (?, ?)
-        """, [cookie, date]
+        """, [cookie, str(date.today())]
     )
+    conn.commit()
     response.status = 200
-    return format_response({'status': response.status})
+    return format_response({'status': response.status, 'date': str(date.today())})
 
 #curl -X GET http://localhost:8888/pallets
 @get('/pallets')
@@ -201,7 +201,7 @@ def get_pallets():
     c = conn.cursor()
     c.execute(
     """
-    SELECT pallet_id, cookie_name, production_date, customer_name, blocked
+    SELECT *
     FROM pallets
     JOIN orders
     USING (order_id)
@@ -211,5 +211,7 @@ def get_pallets():
     data =[{'id':pallet_id, 'cookie': cookie_name, 'productionDate': production_date, 'customer': customer_name, 'blocked': blocked}
     for (pallet_id, cookie_name, production_date, customer_name, blocked) in c]
     return format_response(data)
+
+run(host='localhost', port=8888)
 
 run(host='localhost', port=8888)
