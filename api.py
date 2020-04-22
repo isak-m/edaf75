@@ -161,8 +161,7 @@ def get_cookies():
     ORDER BY cookie_name ASC
     """
     )
-    data = [{'name': cookie_name[0]}
-    for cookie_name in c]
+    data = [{'name': cookie_name[0]} for (cookie_name) in c]
     return format_response(data)
 
 #curl -X GET http://localhost:8888/recipes
@@ -188,10 +187,10 @@ def add_pallet():
     c = conn.cursor()
     c.execute(
     """
-        INSERT
-        INTO pallets(cookie_name, production_date)
-        VALUES (?, ?)
-        """, [cookie, str(date.today())]
+    INSERT
+    INTO pallets(cookie_name, production_date)
+    VALUES (?, ?)
+    """, [cookie, str(date.today())]
     )
     conn.commit()
     response.status = 200
