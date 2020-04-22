@@ -21,7 +21,7 @@ CREATE TABLE pallets(
     delivery_id TEXT,
     cookie_name TEXT,
     production_date DATE,
-    blocked BOOLEAN,
+    blocked BOOLEAN DEFAULT FALSE,
 
     PRIMARY KEY (pallet_id)
     FOREIGN KEY (order_id) REFERENCES orders (order_id)
