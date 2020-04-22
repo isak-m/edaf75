@@ -8,6 +8,7 @@ conn = sqlite3.connect("krusty-db.sqlite", check_same_thread=False)
 def format_response(d):
     return json.dumps(d, indent=4) + "\n"
 
+#curl -X POST http://localhost:8888/reset
 @post('/reset')
 def reset_tables():
     c = conn.cursor()
@@ -117,5 +118,20 @@ def reset_tables():
     conn.commit()
     response.status = 200
     return format_response({'Status': response.status})
+
+#curl -X GET http://localhost:8888/customers
+@get('/customers')
+def get_customers():
+    c = conn.cursor()
+    c.execute(
+    """
+    SELECT *
+    FROM customers
+    WHERE 1=1
+    """
+    )
+    data = [{'name': customer_name, 'address': address}
+            for (customer_name, address) in c]
+    return format_response(data)        
 
 run(host='localhost', port=8888)
