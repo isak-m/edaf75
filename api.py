@@ -187,10 +187,10 @@ def add_pallet():
     c = conn.cursor()
     c.execute(
     """
-        INSERT
-        INTO pallets(cookie_name, production_date)
-        VALUES (?, ?)
-        """, [cookie, str(date.today())]
+    INSERT
+    INTO pallets(cookie_name, production_date)
+    VALUES (?, ?)
+    """, [cookie, str(date.today())]
     )
     conn.commit()
     response.status = 200
