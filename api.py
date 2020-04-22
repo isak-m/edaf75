@@ -213,5 +213,3 @@ def get_pallets():
     return format_response(data)
 
 run(host='localhost', port=8888)
-
-run(host='localhost', port=8888)
