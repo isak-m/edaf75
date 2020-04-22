@@ -74,5 +74,4 @@ CREATE TABLE ingredients(
     delivery_quantity INT,
 
     PRIMARY KEY (ingredient_name)
-    
 );
