@@ -30,25 +30,14 @@ so we use bold face for primary keys, italicized face for
 foreign keys, and bold italicized face for attributes which
 are both primary keys and foreign keys):
 
-+ authors(**author_name**, nationality)
-+ books(**isbn**, book_title, published_year, publisher)
-+ authored_books(**_author_name_**, **_isbn_**)
-+ copies(**copy_barcode**, _isbn_, _library_name_, shelf)
-+ ...
-+ orders(**order_id**, arrival_date)
-+ pallets(**pallet_id**, production_date, blocked)
++ orders(**order_id**, arrival_date, _customer_name_)
++ pallets(**pallet_id**, production_date, blocked, _order_id_, _delivery_id_, _cookie_name_)
 + deliveries(**delivery_id**, delivery_date)
-+ orderspecs(quantity)
-+ recipeitems(quantity)
++ orderspecs(quantity, **_order_id_**, **_cookie_name_**)
++ recipeitems(quantity, **_cookie_name_**, **_ingredient_name_**)
 + customers(**customer_name**, address)
 + cookies(**cookie_name**)
 + ingredients(**ingredient_name**, current_quantity, unit, delivery_quantity)
-
-
-(this should be replaced with your own relations, of course,
-but use the same way of marking primary keys and foreign
-keys).
-
 
 ## Scripts to set up database
 
