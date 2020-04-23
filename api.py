@@ -133,7 +133,7 @@ def get_customers():
     )
     data = [{'name': customer_name, 'address': address}
             for (customer_name, address) in c]
-    return format_response(data)        
+    return format_response({"customers": data})        
 
 #curl -X GET http://localhost:8888/ingredients
 @get('/ingredients')
@@ -148,7 +148,7 @@ def get_ingredients():
     )
     data = [{'name': ingredient_name, 'quantity': current_quantity, 'unit': unit}
     for (ingredient_name, current_quantity, unit) in c]
-    return format_response(data)
+    return format_response({"ingredients": data})
 
 #curl -X GET http://localhost:8888/cookies
 @get('/cookies')
@@ -162,7 +162,7 @@ def get_cookies():
     """
     )
     data = [{'name': cookie_name[0]} for (cookie_name) in c]
-    return format_response(data)
+    return format_response({"cookies": data})
 
 #curl -X GET http://localhost:8888/recipes
 @get('/recipes')
@@ -180,7 +180,7 @@ def get_recipes():
     )
     data = [{'cookie': cookie_name, 'ingredient': ingredient_name, 'quantity': quantity, 'unit': unit}
     for (cookie_name, ingredient_name, quantity, unit) in c]
-    return format_response(data)
+    return format_response({"recipes": data})
 
 #curl -X POST http://localhost:8888/pallets\?cookie\=Berliner
 @post('/pallets')
@@ -201,20 +201,39 @@ def add_pallet():
 #curl -X GET http://localhost:8888/pallets
 @get('/pallets')
 def get_pallets():
+    query = """
+        SELECT pallet_id, cookie_name, production_date, customer_name, blocked
+        FROM pallets
+        LEFT JOIN orders
+        USING (order_id)
+        LEFT JOIN customers
+        USING (customer_name)
+        WHERE 1=1
+        """
+    
+    params = []
+
+    if request.query.cookie:
+    	query += "AND cookie_name = ?"
+    	params.append(request.query.cookie)
+    if request.query.blocked:
+    	query += "AND blocked = ?"
+    	params.append(request.query.blocked)
+    if request.query.before:
+    	query += "AND production_date < ?"
+    	params.append(request.query.before)
+    if request.query.after:
+    	query += "AND production_date > ?"
+    	params.append(request.query.after)
+
     c = conn.cursor()
     c.execute(
-    """
-    SELECT pallet_id, cookie_name, production_date, customer_name, blocked
-    FROM pallets
-    LEFT JOIN orders
-    USING (order_id)
-    LEFT JOIN customers
-    USING (customer_name)
-    WHERE 1=1
-    """
+    	query,
+    	params
     )
+
     data =[{'id':pallet_id, 'cookie': cookie_name, 'productionDate': production_date, 'customer': customer_name, 'blocked': blocked}
     for (pallet_id, cookie_name, production_date, customer_name, blocked) in c]
-    return format_response(data)
+    return format_response({"pallets": data})
 
 run(host='localhost', port=8888)
