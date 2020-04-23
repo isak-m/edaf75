@@ -271,8 +271,8 @@ def add_block(cookie_name, from_date, to_date):
 
     c = conn.cursor()
     c.execute(
-    	query,
-    	params
+        query,
+        params
     )
 
     conn.commit()
@@ -291,8 +291,8 @@ def add_unblock(cookie_name, from_date, to_date):
 
     c = conn.cursor()
     c.execute(
-    	query,
-    	params
+        query,
+        params
     )
 
     conn.commit()
