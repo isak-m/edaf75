@@ -203,7 +203,7 @@ def add_pallet():
     LIMIT 1
     """
     )
-    data = [{'status': 'ok', 'id': id} for (id) in c]
+    data = [{'status': 'ok', 'id': id[0]} for (id) in c]
     response.status = 200
     return format_response(data)
 
