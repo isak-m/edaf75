@@ -259,7 +259,7 @@ def add_block(cookie_name, from_date, to_date):
 #curl -X POST http://localhost:8888/unblock/<cookie-name>/<from-date>/<to-date>
 @post('/unblock/<cookie-name>/<from-date>/<to-date>')
 def add_unblock(cookie_name, from_date, to_date):
-	query = """
+    query = """
         UPDATE pallets
         SET blocked = 0;
         WHERE cookie_name = ? AND production_date BETWEEN ? AND ?
