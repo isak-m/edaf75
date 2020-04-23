@@ -195,8 +195,17 @@ def add_pallet():
     """, [cookie, str(date.today())]
     )
     conn.commit()
+    c.execute(
+    """
+    SELECT pallet_id AS id
+    FROM pallets
+    ORDER BY last_insert_rowid() DESC
+    LIMIT 1
+    """
+    )
+    data = [{'status': 'ok', 'id': id} for (id) in c]
     response.status = 200
-    return format_response({'status': response.status, 'date': str(date.today())})
+    return format_response(data)
 
 #curl -X GET http://localhost:8888/pallets
 @get('/pallets')
