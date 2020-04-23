@@ -189,7 +189,7 @@ def add_pallet():
     c = conn.cursor()
     c.execute(
     """
-    INSERT
+    INSERT OR REPLACE
     INTO pallets(cookie_name, production_date)
     VALUES (?, ?)
     """, [cookie, str(date.today())]
@@ -204,10 +204,12 @@ def get_pallets():
     c = conn.cursor()
     c.execute(
     """
-    SELECT *
+    SELECT pallet_id, cookie_name, production_date, customer_name, blocked
     FROM pallets
-    JOIN orders
+    LEFT JOIN orders
     USING (order_id)
+    LEFT JOIN customers
+    USING (customer_name)
     WHERE 1=1
     """
     )
