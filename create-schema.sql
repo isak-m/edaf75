@@ -7,6 +7,11 @@ DROP TABLE IF EXISTS customers;
 DROP TABLE IF EXISTS cookies;
 DROP TABLE IF EXISTS ingredients;
 
+
+
+
+
+
 CREATE TABLE orders(
     order_id TEXT DEFAULT (lower(hex(randomblob(16)))),
     arrival_date DATE,
@@ -75,3 +80,11 @@ CREATE TABLE ingredients(
 
     PRIMARY KEY (ingredient_name)
 );
+
+DROP TRIGGER IF EXISTS cookie_checker;
+CREATE TRIGGER cookie_checker
+BEFORE INSERT ON pallets
+WHEN NEW.cookie_name NOT IN (SELECT cookie_name FROM cookies)
+BEGIN
+    SELECT RAISE(ROLLBACK, 'No such cookie');
+END;
