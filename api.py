@@ -236,4 +236,44 @@ def get_pallets():
     for (pallet_id, cookie_name, production_date, customer_name, blocked) in c]
     return format_response({"pallets": data})
 
+#curl -X POST http://localhost:8888/block/<cookie-name>/<from-date>/<to-date>
+@post('/block/<cookie-name>/<from-date>/<to-date>')
+def add_block(cookie_name, from_date, to_date):
+    query = """
+        UPDATE pallets
+        SET blocked = 1;
+        WHERE cookie_name = ? AND production_date BETWEEN ? AND ?
+        """
+
+    params = [cookie_name, from_date, to_date]
+
+    c = conn.cursor()
+    c.execute(
+    	query,
+    	params
+    )
+
+    conn.commit()
+    return format_response({"status": "ok"})
+
+#curl -X POST http://localhost:8888/unblock/<cookie-name>/<from-date>/<to-date>
+@post('/unblock/<cookie-name>/<from-date>/<to-date>')
+def add_unblock(cookie_name, from_date, to_date):
+	query = """
+        UPDATE pallets
+        SET blocked = 0;
+        WHERE cookie_name = ? AND production_date BETWEEN ? AND ?
+        """
+
+    params = [cookie_name, from_date, to_date]
+
+    c = conn.cursor()
+    c.execute(
+    	query,
+    	params
+    )
+
+    conn.commit()
+    return format_response({"status": "ok"})
+
 run(host='localhost', port=8888)
