@@ -80,11 +80,3 @@ CREATE TABLE ingredients(
 
     PRIMARY KEY (ingredient_name)
 );
-
-DROP TRIGGER IF EXISTS cookie_checker;
-CREATE TRIGGER cookie_checker
-BEFORE INSERT ON pallets
-WHEN NEW.cookie_name NOT IN (SELECT cookie_name FROM cookies)
-BEGIN
-    SELECT RAISE(ROLLBACK, 'No such cookie');
-END;

@@ -187,21 +187,35 @@ def get_recipes():
 def add_pallet():
     cookie = request.query.cookie
     c = conn.cursor()
-    c.execute(
-    """
-    INSERT OR REPLACE
-    INTO pallets(cookie_name, production_date)
-    VALUES (?, ?)
-    """, [cookie, str(date.today())]
+    c.executescript(
+          """
+          DROP TRIGGER IF EXISTS cookie_checker;
+          CREATE TRIGGER cookie_checker
+          BEFORE INSERT ON pallets
+          WHEN NEW.cookie_name NOT IN (SELECT cookie_name FROM cookies)
+          BEGIN
+            SELECT RAISE(ROLLBACK, 'No such cookie');
+          END;
+          """
     )
     conn.commit()
+    try:
+      c.execute(
+          """
+          INSERT OR REPLACE
+          INTO pallets(cookie_name, production_date)
+          VALUES (?, ?)
+          """, [cookie, str(date.today())]
+      )
+    except Exception:
+      return format_response({'Status': 'No such cookie'})
+    conn.commit()
     c.execute(
-    """
-    SELECT pallet_id AS id
-    FROM pallets
-    ORDER BY last_insert_rowid() DESC
-    LIMIT 1
-    """
+          """
+          SELECT pallet_id AS id
+          FROM pallets
+          WHERE rowid = last_insert_rowid()
+          """
     )
     data = [{'status': 'ok', 'id': id[0]} for (id) in c]
     response.status = 200
@@ -253,7 +267,6 @@ def add_block(cookie_name, from_date, to_date):
         SET blocked = 1;
         WHERE cookie_name = ? AND production_date BETWEEN ? AND ?
         """
-
     params = [cookie_name, from_date, to_date]
 
     c = conn.cursor()
