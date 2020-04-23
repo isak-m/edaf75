@@ -118,7 +118,7 @@ def reset_tables():
     )
     conn.commit()
     response.status = 200
-    return format_response({'Status': response.status})
+    return format_response({"status": "ok"})
 
 #curl -X GET http://localhost:8888/customers
 @get('/customers')
@@ -170,14 +170,16 @@ def get_recipes():
     c = conn.cursor()
     c.execute(
     """
-    SELECT *
+    SELECT cookie_name, ingredient_name, quantity, unit
     FROM recipe_items
+    JOIN ingredients
+    USING (ingredient_name)
     WHERE 1=1
     ORDER BY cookie_name, ingredient_name ASC
     """
     )
-    data = [{'name': cookie_name, 'ingredient': ingredient_name, 'quantity': quantity}
-    for (cookie_name, ingredient_name, quantity) in c]
+    data = [{'cookie': cookie_name, 'ingredient': ingredient_name, 'quantity': quantity, 'unit': unit}
+    for (cookie_name, ingredient_name, quantity, unit) in c]
     return format_response(data)
 
 #curl -X POST http://localhost:8888/pallets\?cookie\=Berliner
