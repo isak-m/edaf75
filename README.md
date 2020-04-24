@@ -8,8 +8,6 @@ This is the report for
 We solved this project on our own, except for:
 
  + The Peer-review meeting
- + ... describe any other help you've gotten ...
-
 
 ## ER-design
 
