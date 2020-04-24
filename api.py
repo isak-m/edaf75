@@ -188,15 +188,15 @@ def add_pallet():
     cookie = request.query.cookie
     c = conn.cursor()
     c.executescript(
-          """
-          DROP TRIGGER IF EXISTS cookie_checker;
-          CREATE TRIGGER cookie_checker
-          BEFORE INSERT ON pallets
-          WHEN NEW.cookie_name NOT IN (SELECT cookie_name FROM cookies)
-          BEGIN
-            SELECT RAISE(ROLLBACK, 'No such cookie');
-          END;
-          """
+      """
+      DROP TRIGGER IF EXISTS cookie_checker;
+      CREATE TRIGGER cookie_checker
+      BEFORE INSERT ON pallets
+      WHEN NEW.cookie_name NOT IN (SELECT cookie_name FROM cookies)
+      BEGIN
+        SELECT RAISE(ROLLBACK, 'No such cookie');
+      END;
+      """
     )
     conn.commit()
     try:
@@ -208,7 +208,14 @@ def add_pallet():
           """, [cookie, str(date.today())]
       )
     except Exception:
-      return format_response({'Status': 'No such cookie'})
+      return format_response({'status': 'no such cookie'})
+    c.execute(
+          """
+          UPDATE ingredients
+          SET current_quantity = current_quantity - (SELECT quantity FROM recipe_items WHERE cookie_name = ? AND recipe_items.ingredient_name = ingredients.ingredient_name) * 54
+          WHERE ingredient_name IN (SELECT ingredient_name FROM recipe_items WHERE cookie_name = ?)
+          """, [cookie,cookie]
+    )
     conn.commit()
     c.execute(
           """
