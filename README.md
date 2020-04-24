@@ -59,5 +59,5 @@ After creating and initializing the database. The REST API can be run from the c
 python api.py
 ```
 
-This will work if you have python installed on your computer.
+This command will work if you have python installed on your computer.
 
