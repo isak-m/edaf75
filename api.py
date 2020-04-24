@@ -216,6 +216,7 @@ def add_pallet():
           """, [cookie, str(date.today())]
       )
     except Exception:
+      response.status = 500
       return format_response({'status': 'no such cookie'})
     try:
       c.execute(
@@ -227,6 +228,7 @@ def add_pallet():
           """, [cookie,cookie]
       )
     except Exception:
+      response.status = 500
       return format_response({'status': 'not enough ingredients'})
     conn.commit()
     c.execute(
@@ -236,9 +238,10 @@ def add_pallet():
           WHERE rowid = last_insert_rowid()
           """
     )
-    data = [{'status': 'ok', 'id': id[0]} for (id) in c]
     response.status = 200
-    return format_response(data)
+    #data = [{'status': 'ok', 'id': 'id' : c.fetchone()[0]} for (id) in c]
+    return json.dumps({'status' : 'ok', 'id' : c.fetchone()[0]})
+#    return format_response(data)
 
 #curl -X GET http://localhost:8888/pallets
 @get('/pallets')
