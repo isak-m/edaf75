@@ -53,27 +53,13 @@ sqlite3 krusty-db.sqlite < create-schema.sql
 sqlite3 krusty-db.sqlite < initial-data.sql
 ```
 
-(or whatever you call your database file).
 
 ## How to compile and run the program
 
-This section should give a few simple commands to type to
-compile and run the program from the command line, such as:
-
-```shell
-./gradlew run
+After creating and initializing the database. The REST API can be run from the command line through:
+```
+python api.py
 ```
 
-or
+This will work if you have python installed on your computer.
 
-```shell
-javac -d bin/ -cp src src/krusty/Main.java
-java -cp bin:sqlite-jdbc.jar krusty.Main
-```
-
-or, if you put your commands into a `Makefile`:
-
-```shell
-make compile
-make run
-```
