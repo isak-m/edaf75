@@ -196,6 +196,14 @@ def add_pallet():
       BEGIN
         SELECT RAISE(ROLLBACK, 'No such cookie');
       END;
+ 
+      DROP TRIGGER IF EXISTS pantry_checker;
+      CREATE TRIGGER pantry_checker
+      BEFORE UPDATE ON ingredients
+      WHEN NEW.current_quantity < 0 
+      BEGIN
+        SELECT RAISE(ROLLBACK, 'not enough ingredients');
+      END;
       """
     )
     conn.commit()
@@ -209,13 +217,17 @@ def add_pallet():
       )
     except Exception:
       return format_response({'status': 'no such cookie'})
-    c.execute(
+    try:
+      c.execute(
           """
           UPDATE ingredients
-          SET current_quantity = current_quantity - (SELECT quantity FROM recipe_items WHERE cookie_name = ? AND recipe_items.ingredient_name = ingredients.ingredient_name) * 54
+          SET current_quantity = current_quantity - (SELECT quantity FROM recipe_items WHERE cookie_name = ? 
+                                                     AND recipe_items.ingredient_name = ingredients.ingredient_name) * 54
           WHERE ingredient_name IN (SELECT ingredient_name FROM recipe_items WHERE cookie_name = ?)
           """, [cookie,cookie]
-    )
+      )
+    except Exception:
+      return format_response({'status': 'not enough ingredients'})
     conn.commit()
     c.execute(
           """
